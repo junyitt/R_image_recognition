@@ -70,8 +70,11 @@ model %>% compile(
 )
 
 
+system.time({
+  
+
 # Training ----------------------------------------------------------------
-data_augmentation = FALSE
+data_augmentation = TRUE
 if(!data_augmentation){
     print("test")
     model %>% fit(
@@ -96,8 +99,28 @@ if(!data_augmentation){
     model %>% fit_generator(
         flow_images_from_data(x_train, y_train, datagen, batch_size = batch_size),
         steps_per_epoch = as.integer(50000/batch_size), 
-        epochs = epochs, 
-        validation_data = list(x_test, y_test)
+        epochs = epochs,
+        validation_data = flow_images_from_data(x_test, y_test, datagen, batch_size = batch_size)
     )
     
 }
+
+
+})
+  
+predicted_class <- model %>% predict_generator(generator = flow_images_from_data(x_test, y_test, datagen, batch_size = batch_size), steps = batch_size)
+
+yp <- apply(predicted_class, 1, FUN = function(x) which.max(x))
+yp2 <- apply(predicted_class, 1, FUN = function(x) which(x==sort(x, T)[2]))
+yp3 <- apply(predicted_class, 1, FUN = function(x) which(x==sort(x, T)[3]))
+yp4 <- apply(predicted_class, 1, FUN = function(x) which(x==sort(x, T)[4]))
+yp5 <- apply(predicted_class, 1, FUN = function(x) which(x==sort(x, T)[5]))
+yt <- cifar10$test$y[,1]
+
+#top 1 accuracy
+mean(yp == yt)
+mean(yp == yt | yp2 == yt)
+#top 5 accuracy
+mean(yp == yt | yp2 == yt | yp3 == yt | yp4 == yt | yp5 == yt) 
+
+sort(c(1,2,3,4,5),T)[2]

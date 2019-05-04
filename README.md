@@ -11,7 +11,7 @@ https://sefiks.com/2018/08/06/deep-face-recognition-with-keras/
 
 
 
-## Human dataet
+## Human dataset
 https://sites.google.com/view/sof-dataset
 
 ## Pretrained model

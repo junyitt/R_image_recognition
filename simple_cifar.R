@@ -107,20 +107,50 @@ if(!data_augmentation){
 
 
 })
-  
-predicted_class <- model %>% predict_generator(generator = flow_images_from_data(x_test, y_test, datagen, batch_size = batch_size), steps = batch_size)
+ 
+evaluate_generator(model, generator = flow_images_from_data(x_test, y_test, datagen, batch_size = batch_size), steps = batch_size)
 
-yp <- apply(predicted_class, 1, FUN = function(x) which.max(x))
-yp2 <- apply(predicted_class, 1, FUN = function(x) which(x==sort(x, T)[2]))
-yp3 <- apply(predicted_class, 1, FUN = function(x) which(x==sort(x, T)[3]))
-yp4 <- apply(predicted_class, 1, FUN = function(x) which(x==sort(x, T)[4]))
-yp5 <- apply(predicted_class, 1, FUN = function(x) which(x==sort(x, T)[5]))
-yt <- cifar10$test$y[,1]
 
-#top 1 accuracy
-mean(yp == yt)
-mean(yp == yt | yp2 == yt)
-#top 5 accuracy
-mean(yp == yt | yp2 == yt | yp3 == yt | yp4 == yt | yp5 == yt) 
+g = model %>% predict(x_test[1:220,,,])
 
-sort(c(1,2,3,4,5),T)[2]
+get_top <- function(x, n){
+    return(which(x == sort(x,T)[n])[1])
+}
+bb = apply(y_test[1:220,], 1, FUN = function(x)which.max(x))
+cc1 = apply(g, 1, FUN = function(x)which.max(x))
+cc2 = apply(g, 1, FUN = function(x)get_top(x,2))
+cc3 = apply(g, 1, FUN = function(x)get_top(x,3))
+cc4 = apply(g, 1, FUN = function(x)get_top(x,4))
+cc5 = apply(g, 1, FUN = function(x)get_top(x,5))
+
+mean(bb == cc1)
+mean(bb == cc1 | 
+         bb == cc2 )
+mean(bb == cc1 | 
+         bb == cc2 |
+         bb == cc3 |
+         bb == cc4 |
+         bb == cc5
+)
+     
+x = c(1,2,3
+      )
+which(x==sort(x, T)[2])
+
+# predicted_class <- model %>% predict_generator(generator = flow_images_from_data(x_test, y_test, datagen, batch_size = batch_size), steps = batch_size)
+# 
+# yp <- apply(predicted_class, 1, FUN = function(x) which.max(x))
+# yt2 <- apply(y_test, 1, FUN = function(x) which.max(x))
+# yp2 <- apply(predicted_class, 1, FUN = function(x) which(x==sort(x, T)[2]))
+# yp3 <- apply(predicted_class, 1, FUN = function(x) which(x==sort(x, T)[3]))
+# yp4 <- apply(predicted_class, 1, FUN = function(x) which(x==sort(x, T)[4]))
+# yp5 <- apply(predicted_class, 1, FUN = function(x) which(x==sort(x, T)[5]))
+# yt <- cifar10$test$y[,1]
+# 
+# #top 1 accuracy
+# mean(yp == yt2)
+# mean(yp == yt | yp2 == yt)
+# #top 5 accuracy
+# mean(yp == yt | yp2 == yt | yp3 == yt | yp4 == yt | yp5 == yt) 
+# 
+# sort(c(1,2,3,4,5),T)[2]

@@ -82,4 +82,4 @@ model %>% load_model_weights_hdf5(
 
 class_indices <- train_data_generator$class_indices
 save(class_indices, file = file.path(model_path, paste0("/class_indices_", model_id, ".rdata"))) #save class_indices
-model %>% save_model_hdf5(file.path(model_path, paste0(model_path, "model_", model_id, ".h5"))) #save model
+model %>% save_model_hdf5(file.path(model_path, paste0("model_", model_id, ".h5"))) #save model

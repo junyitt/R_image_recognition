@@ -31,13 +31,13 @@ get_img_path <- function(img_name, img_path = "C:/Users/jy/Desktop/R_IR_7004/Dat
 
 
 # Parameters --------------------------------------------------------------
-model_id <- "2"
+model_id <- "3"
 path <- "C:/Users/jy/Desktop/R_IR_7004/"
 model_path <- file.path(path, "Models")
 
-model <- load_model_hdf5(file.path(model_path, paste0("model_", model_id, ".h5")), compile = F)
 load(file = file.path(model_path, paste0("class_indices_", model_id, ".rdata")))
+model <- load_model_hdf5(file.path(model_path, paste0("model_", model_id, ".h5")), compile = F)
 
-img_path <- get_img_path("9338454.15")
+img_path <- get_img_path("cipa")
 get_pred(img_path, model, class_indices,  n = 5)
 

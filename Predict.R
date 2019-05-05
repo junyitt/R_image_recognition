@@ -29,10 +29,13 @@ get_img_path <- function(img_name, img_path = "C:/Users/jy/Desktop/test"){
     return(test_img)
 }
 
+
+# Parameters --------------------------------------------------------------
 model_id <- "1"
-model_path <- "C:/Users/jy/Desktop/R_IR_7004/Models/"
+path <- "C:/Users/jy/Desktop/R_IR_7004/"
+model_path <- file.path(path, "Models")
 
 model <- load_model_hdf5(paste0(model_path, "model_", model_id, ".h5"), compile = F)
 load(file = paste0(model_path, "class_indices_", model_id, ".rdata"))
-img_path <- get_img_path("boylee.17")
+img_path <- get_img_path("IMG_20190218_203125")
 get_pred(img_path, model, class_indices,  n = 5)

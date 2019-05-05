@@ -1,7 +1,10 @@
 library(keras)
 
 # Parameters --------------------------------------------------------------
-
+model_id <- "1"
+path <- "C:/Users/jy/Desktop/R_IR_7004/"
+model_path <- file.path(path, "Models")
+checkpoint_dir <- file.path(path, "Checkpoints")
 batch_size <- 32
 epochs <- 5
 
@@ -14,18 +17,15 @@ image_data_generator_1 <- image_data_generator(
     validation_split = 0.2
 )
 
-train_data_generator <- flow_images_from_directory("C:/Users/jy/Desktop/R_IR_7004/faces-data-new/main_data", 
+train_data_generator <- flow_images_from_directory(file.path(path, "Data"), 
                                              generator = image_data_generator_1,
                                              target_size = c(180, 180), subset = "training"
 )
 
-val_data_generator <- flow_images_from_directory("C:/Users/jy/Desktop/R_IR_7004/faces-data-new/main_data", 
+val_data_generator <- flow_images_from_directory(file.path(path, "Data"), 
                                                    generator = image_data_generator_1,
                                                    target_size = c(180, 180), subset = "validation"
 )
-
-
-
 
 input_img <- layer_input(shape = c(180, 180, 3))
 num_classes <- train_data_generator$num_classes
@@ -36,10 +36,10 @@ predictions <- base_model$output %>%
     layer_dense(units = num_classes, activation = 'softmax')
 model <- keras_model(inputs = base_model$input, outputs = predictions)
 
-layers <- model$layers
-for (i in 1:length(layers)){
-    cat(i, layers[[i]]$name, "\n")
-}
+# layers <- model$layers
+# for (i in 1:length(layers)){
+#     cat(i, layers[[i]]$name, "\n")
+# }
 
 opt <- optimizer_rmsprop(lr = 0.0001, decay = 1e-6)
 
@@ -49,6 +49,15 @@ model %>% compile(
     metrics = "accuracy"
 )
 
+dir.create(checkpoint_dir, showWarnings = FALSE)
+checkpoint_filepath <- file.path(checkpoint_dir, paste0("weights_", model_id, "_{epoch:02d}-{val_loss:.2f}.hdf5"))
+
+cp_callback <- callback_model_checkpoint(
+    filepath = checkpoint_filepath,
+    save_weights_only = TRUE,
+    save_best_only = TRUE,
+    verbose = 1
+)
 
 system.time({
     # Training ----------------------------------------------------------------
@@ -57,13 +66,19 @@ system.time({
         validation_data = val_data_generator,
         steps_per_epoch = as.integer(train_data_generator$samples/batch_size), 
         validation_steps  = as.integer(val_data_generator$samples/batch_size), 
+        callbacks = list(cp_callback), 
         epochs = epochs
     )
 })
 
+checkpoints_w <- list.files(checkpoint_dir, pattern = paste0("weights_", model_id))
+last_checkpoint <- checkpoints_w[length(checkpoints_w)]
 
-model_id <- "1"
-model_path <- "C:/Users/jy/Desktop/R_IR_7004/Models/"
-class_indices <- data_generator$class_indices
+# Load best model
+model %>% load_model_weights_hdf5(
+    file.path(checkpoint_dir, last_checkpoint)
+)
+
+class_indices <- train_data_generator$class_indices
 save(class_indices, file = paste0(model_path, "class_indices_", model_id, ".rdata")) #save class_indices
 model %>% save_model_hdf5(paste0(model_path, "model_", model_id, ".h5")) #save model

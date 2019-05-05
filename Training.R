@@ -1,12 +1,13 @@
 library(keras)
 
 # Parameters --------------------------------------------------------------
-model_id <- "1"
+model_id <- "3"
 path <- "C:/Users/jy/Desktop/R_IR_7004/"
+data_path <- file.path(path, "Data")
 model_path <- file.path(path, "Models")
 checkpoint_dir <- file.path(path, "Checkpoints")
 batch_size <- 32
-epochs <- 5
+epochs <- 10
 
 # Data Preparation --------------------------------------------------------
 image_data_generator_1 <- image_data_generator(
@@ -17,12 +18,12 @@ image_data_generator_1 <- image_data_generator(
     validation_split = 0.2
 )
 
-train_data_generator <- flow_images_from_directory(file.path(path, "Data"), 
+train_data_generator <- flow_images_from_directory(data_path, 
                                              generator = image_data_generator_1,
                                              target_size = c(180, 180), subset = "training"
 )
 
-val_data_generator <- flow_images_from_directory(file.path(path, "Data"), 
+val_data_generator <- flow_images_from_directory(data_path, 
                                                    generator = image_data_generator_1,
                                                    target_size = c(180, 180), subset = "validation"
 )
@@ -80,5 +81,5 @@ model %>% load_model_weights_hdf5(
 )
 
 class_indices <- train_data_generator$class_indices
-save(class_indices, file = paste0(model_path, "class_indices_", model_id, ".rdata")) #save class_indices
-model %>% save_model_hdf5(paste0(model_path, "model_", model_id, ".h5")) #save model
+save(class_indices, file = file.path(model_path, paste0("/class_indices_", model_id, ".rdata"))) #save class_indices
+model %>% save_model_hdf5(file.path(model_path, paste0(model_path, "model_", model_id, ".h5"))) #save model

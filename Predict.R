@@ -19,7 +19,7 @@ get_pred <- function(img_path, model, class_indices,  n = 5){
     return(pdf)
 }
 
-get_img_path <- function(img_name, img_path = "C:/Users/jy/Desktop/test"){
+get_img_path <- function(img_name, img_path = "C:/Users/jy/Desktop/R_IR_7004/DataTest"){
     test_img <- paste0(img_name, ".jpeg")
     final_img_path <- file.path(img_path, test_img)
     if(!file.exists(final_img_path)){
@@ -31,11 +31,13 @@ get_img_path <- function(img_name, img_path = "C:/Users/jy/Desktop/test"){
 
 
 # Parameters --------------------------------------------------------------
-model_id <- "1"
+model_id <- "2"
 path <- "C:/Users/jy/Desktop/R_IR_7004/"
 model_path <- file.path(path, "Models")
 
-model <- load_model_hdf5(paste0(model_path, "model_", model_id, ".h5"), compile = F)
-load(file = paste0(model_path, "class_indices_", model_id, ".rdata"))
-img_path <- get_img_path("IMG_20190218_203125")
+model <- load_model_hdf5(file.path(model_path, paste0("model_", model_id, ".h5")), compile = F)
+load(file = file.path(model_path, paste0("class_indices_", model_id, ".rdata")))
+
+img_path <- get_img_path("9338454.15")
 get_pred(img_path, model, class_indices,  n = 5)
+

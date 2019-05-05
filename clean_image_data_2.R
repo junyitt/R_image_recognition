@@ -9,8 +9,9 @@ load_and_resize <- function(img_path){
     return(p2)
 }
 
-main_path <- "C:/Users/jy/Desktop/R_IR_7004/face-images-13233/Images"
-clean_path <- "C:/Users/jy/Desktop/R_IR_7004/face-images-13233/clean_1"
+main_path <- "C:/Users/jy/Desktop/R_IR_7004/faces-data-new/images"
+clean_path <- "C:/Users/jy/Desktop/R_IR_7004/faces-data-new/clean_2"
+clean_val_path <- "C:/Users/jy/Desktop/R_IR_7004/faces-data-new/clean_val"
 img_filenames <- list.files(main_path)
 
 for(img_filename in img_filenames){
@@ -18,7 +19,7 @@ for(img_filename in img_filenames){
     orig_path <- file.path(main_path, img_filename)
     
     # Get Category/Class Name
-    k <- stringr::str_locate(string = img_filename, "[_][0-9]")[[1]]
+    k <- stringr::str_locate(string = img_filename, "[.]")[[1]]
     category_name <- substr(img_filename, 1, k - 1)
     
     # Create dest_path folder
@@ -35,8 +36,25 @@ for(img_filename in img_filenames){
 }
 
 
+folder_name <- list.files(clean_path)
+orig_path <- file.path(clean_path, folder_name)
+dest_path <- file.path(clean_val_path, folder_name)
 
-
+for(f in folder_name){
+    orig_path <- file.path(clean_path, f)
+    img_names <- list.files(orig_path)
+    val_imgs <- sample(img_names, 3, replace = T)
+    for(img_filename in val_imgs){
+        dest_path <- file.path(clean_val_path, f)
+        if(!dir.exists(dest_path)){
+            dir.create(dest_path)
+        }
+        orig_image_path <- file.path(orig_path, img_filename)
+        dest_image_path <- file.path(dest_path, img_filename)
+        file.copy(from = orig_image_path, to = dest_image_path)
+        file.remove(orig_image_path)
+    }
+}
 
 # 
 # 

@@ -1,7 +1,7 @@
 library(keras)
 
 # Parameters --------------------------------------------------------------
-model_id <- "3"
+model_id <- "4"
 path <- "C:/Users/jy/Desktop/R_IR_7004/"
 data_path <- file.path(path, "Data")
 model_path <- file.path(path, "Models")

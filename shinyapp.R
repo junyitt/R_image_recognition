@@ -1,3 +1,4 @@
+library(shiny)
 
 library(dplyr)
 library(keras)
@@ -19,6 +20,7 @@ get_pred <- function(img_path, model, class_indices,  n = 5){
     return(pdf)
 }
 
+
 get_img_path <- function(img_name, img_path = "C:/Users/jy/Desktop/R_IR_7004/DataTest", add_extension = T){
     if(add_extension){
         test_img <- paste0(img_name, ".jpeg")
@@ -35,16 +37,50 @@ get_img_path <- function(img_name, img_path = "C:/Users/jy/Desktop/R_IR_7004/Dat
 }
 
 
+
 # Parameters --------------------------------------------------------------
 model_id <- "4"
 path <- "C:/Users/jy/Desktop/R_IR_7004/"
-test_path <- "C:/Users/jy/Desktop/R_IR_7004/DataTest"
+test_path <- "C:/Users/jy/Desktop/R_IR_7004/DataTestTemp"
 model_path <- file.path(path, "Models")
 
 load(file = file.path(model_path, paste0("class_indices_", model_id, ".rdata")))
 model <- load_model_hdf5(file.path(model_path, paste0("model_", model_id, ".h5")), compile = F)
 
 test_img_folder <- "C:/Users/jy/Desktop/R_IR_7004/DataTest2/archive"
-img_path <- get_img_path("19274921_1355879227815089_872306674373643628_n", img_path = test_img_folder)
-get_pred(img_path, model, class_indices,  n = 5)
+# img_path <- get_img_path("19274921_1355879227815089_872306674373643628_n", img_path = test_img_folder)
+# get_pred(img_path, model, class_indices,  n = 5)
 
+
+
+
+shinyApp(
+    ui = shinyUI(  
+        fluidRow( 
+            fileInput("myFile", "Choose a file", accept = c('image/png', 'image/jpeg', 'image/jpg')),
+            column(12,
+                tableOutput('predictTable')
+            )
+        )
+    ),
+    server = shinyServer(function(input, output,session){
+        observeEvent(input$myFile, {
+            inFile <- input$myFile
+            if (is.null(inFile))
+                return()
+            file.copy(inFile$datapath, file.path(test_path, inFile$name) )
+            img_path <- tryCatch({
+                img_path <- get_img_path(inFile$name, img_path = test_path, add_extension = F)
+                img_path
+            })
+            
+            pred_df <- get_pred(img_path, model, class_indices,  n = 5)
+            output$predictTable <- renderTable(pred_df)
+            
+        })
+        
+        
+    })
+)
+
+# shinyApp(ui, server)

@@ -1,5 +1,4 @@
 library(shiny)
-
 library(dplyr)
 library(keras)
 
@@ -16,7 +15,7 @@ get_pred <- function(img_path, model, class_indices,  n = 5){
     predicted_index <- which.max(features)
     predicted_class <- names(class_indices)[[predicted_index]]
     pred_df <- data.frame(class = names(class_indices), indices = 1:length(features), prob = features[,])
-    pdf <- pred_df %>% top_n(5,prob) %>% arrange(-prob)
+    pdf <- pred_df %>% top_n(n,prob) %>% arrange(-prob) %>% mutate(rank = 1:n) %>% select(rank = rank, class = class, probability = prob)
     return(pdf)
 }
 

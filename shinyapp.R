@@ -40,27 +40,23 @@ get_img_path <- function(img_name, img_path = "C:/Users/jy/Desktop/R_IR_7004/Dat
 
 # Parameters --------------------------------------------------------------
 model_id <- "4"
-path <- "C:/Users/jy/Desktop/R_IR_7004/"
-test_path <- "C:/Users/jy/Desktop/R_IR_7004/DataTestTemp"
+path <- "."
+test_path <- "./DataTestTemp"
 model_path <- file.path(path, "Models")
 
 load(file = file.path(model_path, paste0("class_indices_", model_id, ".rdata")))
 model <- load_model_hdf5(file.path(model_path, paste0("model_", model_id, ".h5")), compile = F)
 
-test_img_folder <- "C:/Users/jy/Desktop/R_IR_7004/DataTest2/archive"
-# img_path <- get_img_path("19274921_1355879227815089_872306674373643628_n", img_path = test_img_folder)
-# get_pred(img_path, model, class_indices,  n = 5)
-
-
-
-
 shinyApp(
     ui = shinyUI(  
         fluidRow( 
-            fileInput("myFile", "Choose a file", accept = c('image/png', 'image/jpeg', 'image/jpg')),
-            column(12,
-                tableOutput('predictTable')
-            )
+            h1("Select Input"),
+            fileInput("myFile", "Choose an image file:", accept = c('image/png', 'image/jpeg', 'image/jpg')),
+            h1("Input Image"),
+            imageOutput("image2", width = "300px", height = "300px"),
+            h1("Predicted Class"),
+            tableOutput('predictTable')
+            
         )
     ),
     server = shinyServer(function(input, output,session){
@@ -73,6 +69,18 @@ shinyApp(
                 img_path <- get_img_path(inFile$name, img_path = test_path, add_extension = F)
                 img_path
             })
+            
+            output$image2 <- renderImage({
+                return(list(
+                    src = img_path,
+                    contentType = "image",
+                    width = 300,
+                    height = 300,
+                    alt = "Face"
+                ))
+                
+            }, deleteFile = FALSE)
+            
             
             pred_df <- get_pred(img_path, model, class_indices,  n = 5)
             output$predictTable <- renderTable(pred_df)

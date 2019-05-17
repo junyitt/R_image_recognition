@@ -38,7 +38,7 @@ get_img_path <- function(img_name, img_path = "C:/Users/jy/Desktop/R_IR_7004/Dat
 
 
 # Parameters --------------------------------------------------------------
-model_id <- "4"
+model_id <- "5"
 path <- "."
 test_path <- "./DataTestTemp"
 model_path <- file.path(path, "Models")

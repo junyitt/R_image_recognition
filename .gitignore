@@ -1,14 +1,16 @@
 /Data
 /Data_1
+/Data_2
+/Data11
 /Data_notworking
 /custom_data
 /Archive_Data
 /DataTest
 /Models
 /Checkpoints
+/New folder (5)
 *.h5
 
-
-DataTest2/
-
-DataTestTemp/
+/DataTest
+/DataTest2
+/DataTestTemp/

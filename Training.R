@@ -1,7 +1,20 @@
 library(keras)
 
+get_class_weights <- function(data_generator){
+    counter <- table(data_generator$classes)  
+    class_weights <- list()
+    IX <- names(counter)
+    VA <- counter
+    
+    for(i in 1:length(IX)){
+        class_weights[[IX[i]]] <- VA[[i]]    
+    }
+    return(class_weights)
+    uy
+}
+
 # Parameters --------------------------------------------------------------
-model_id <- "4"
+model_id <- "A1"
 path <- "C:/Users/jy/Desktop/R_IR_7004/"
 data_path <- file.path(path, "Data")
 model_path <- file.path(path, "Models")
@@ -28,12 +41,17 @@ val_data_generator <- flow_images_from_directory(data_path,
                                                    target_size = c(180, 180), subset = "validation"
 )
 
+cw <- get_class_weights(train_data_generator)
+
+
 input_img <- layer_input(shape = c(180, 180, 3))
 num_classes <- train_data_generator$num_classes
 
 base_model <- application_mobilenet_v2(include_top = F, input_tensor = input_img)
 predictions <- base_model$output %>% 
     keras::layer_global_average_pooling_2d() %>% 
+    layer_dense(units = 128, activation = 'relu') %>%
+    layer_dense(units = 256, activation = 'relu') %>%
     layer_dense(units = num_classes, activation = 'softmax')
 model <- keras_model(inputs = base_model$input, outputs = predictions)
 
@@ -68,6 +86,7 @@ system.time({
         steps_per_epoch = as.integer(train_data_generator$samples/batch_size), 
         validation_steps  = as.integer(val_data_generator$samples/batch_size), 
         callbacks = list(cp_callback), 
+        class_weight = cw,
         epochs = epochs
     )
 })

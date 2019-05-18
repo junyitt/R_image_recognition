@@ -14,13 +14,15 @@ get_class_weights <- function(data_generator){
 }
 
 # Parameters --------------------------------------------------------------
-model_id <- "A1"
+model_id <- "LFW2"
 path <- "C:/Users/jy/Desktop/R_IR_7004/"
-data_path <- file.path(path, "Data")
+# data_path <- file.path(path, "Data")
+data_path <- file.path(path, "FILTER_Combined")
+test_path <- file.path(path, "TEST_FILTER_Combined")
 model_path <- file.path(path, "Models")
 checkpoint_dir <- file.path(path, "Checkpoints")
 batch_size <- 32
-epochs <- 10
+epochs <- 100
 
 # Data Preparation --------------------------------------------------------
 image_data_generator_1 <- image_data_generator(
@@ -33,18 +35,18 @@ image_data_generator_1 <- image_data_generator(
 
 train_data_generator <- flow_images_from_directory(data_path, 
                                              generator = image_data_generator_1,
-                                             target_size = c(180, 180), subset = "training"
+                                             target_size = c(150, 150), subset = "training"
 )
 
 val_data_generator <- flow_images_from_directory(data_path, 
                                                    generator = image_data_generator_1,
-                                                   target_size = c(180, 180), subset = "validation"
+                                                   target_size = c(150, 150), subset = "validation"
 )
 
 cw <- get_class_weights(train_data_generator)
 
 
-input_img <- layer_input(shape = c(180, 180, 3))
+input_img <- layer_input(shape = c(150, 150, 3))
 num_classes <- train_data_generator$num_classes
 
 base_model <- application_mobilenet_v2(include_top = F, input_tensor = input_img)
@@ -102,3 +104,13 @@ model %>% load_model_weights_hdf5(
 class_indices <- train_data_generator$class_indices
 save(class_indices, file = file.path(model_path, paste0("/class_indices_", model_id, ".rdata"))) #save class_indices
 model %>% save_model_hdf5(file.path(model_path, paste0("model_", model_id, ".h5"))) #save model
+
+
+
+test_data_generator <- flow_images_from_directory(test_path, 
+                                                 generator = image_data_generator_1,
+                                                 target_size = c(150, 150)
+)
+
+model %>% evaluate_generator(test_data_generator, steps = as.integer(test_data_generator$samples/batch_size))
+

@@ -10,6 +10,10 @@
 /Checkpoints
 /New folder (5)
 *.h5
+*.jpg
+*.jpeg
+*.png
+
 
 /DataTest
 /DataTest2

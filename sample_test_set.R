@@ -1,7 +1,6 @@
-source("./crop_face.R")
-
-data_path <- "./FILTER_Combined"
-test_data_path <- "./TEST_FILTER_Combined"
+# source("./crop_face.R")
+data_path <- "./FILTER_Gender_UTKFace"
+test_data_path <- "./TEST_FILTER_Gender_UTKFace"
 dir.create(test_data_path, showWarnings = F)
 
 folders <- list.files(data_path, full.names = F)

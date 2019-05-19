@@ -2,8 +2,8 @@
 library(dplyr)
 library(keras)
 
-get_pred <- function(img_path, model, class_indices,  n = 5){
-    img <- image_load(img_path, target_size = c(180,180))
+get_pred <- function(img_path, model, class_indices,  n = 5, img_size = 150){
+    img <- image_load(img_path, target_size = c(img_size,img_size))
     x <- image_to_array(img)
     x <- array_reshape(x, c(1, dim(x)))
     
@@ -36,7 +36,7 @@ get_img_path <- function(img_name, img_path = "C:/Users/jy/Desktop/R_IR_7004/Dat
 
 
 # Parameters --------------------------------------------------------------
-model_id <- "4"
+model_id <- "LFW2"
 path <- "C:/Users/jy/Desktop/R_IR_7004/"
 test_path <- "C:/Users/jy/Desktop/R_IR_7004/DataTest"
 model_path <- file.path(path, "Models")
@@ -44,7 +44,10 @@ model_path <- file.path(path, "Models")
 load(file = file.path(model_path, paste0("class_indices_", model_id, ".rdata")))
 model <- load_model_hdf5(file.path(model_path, paste0("model_", model_id, ".h5")), compile = F)
 
-test_img_folder <- "C:/Users/jy/Desktop/R_IR_7004/DataTest2/archive"
-img_path <- get_img_path("19274921_1355879227815089_872306674373643628_n", img_path = test_img_folder)
+test_img_folder <- "C:/Users/jy/Desktop/R_IR_7004/DataTest/_elvispresley3"
+img_path <- get_img_path("0_PROD-Photo-of-Elvis-PRESLEY", img_path = test_img_folder)
+img_path <- get_img_path("elvis_presley_hero_74290646", img_path = test_img_folder)
+img_path <- get_img_path("elvis-presley", img_path = test_img_folder)
+img_path <- get_img_path("ep2", img_path = test_img_folder)
 get_pred(img_path, model, class_indices,  n = 5)
 

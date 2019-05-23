@@ -1,8 +1,6 @@
 data_path <- "./UTKFace/UTKFace"
 gender_data_path <- "./FILTER_Gender_UTKFace"
-age_data_path <- "./FILTER_Age_UTKFace"
 dir.create(gender_data_path, showWarnings = F)
-dir.create(age_data_path, showWarnings = F)
 
 
 img_files <- list.files(data_path)
@@ -12,12 +10,9 @@ status <- sapply(img_files, FUN = function(img_file){
     ethnic <- strsplit(img_file, "[_]")[[1]][3]
     
     orig_path <- file.path(data_path, img_file)
-    age_dest_path <- file.path(age_data_path, age)
     gender_dest_path <- file.path(gender_data_path, gender)
-    dir.create(age_dest_path, showWarnings = F)
     dir.create(gender_dest_path, showWarnings = F)
     
-    file.copy(orig_path, age_dest_path)
     file.copy(orig_path, gender_dest_path)
 })
 

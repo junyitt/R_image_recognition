@@ -13,7 +13,7 @@ get_class_weights <- function(data_generator){
 }
 
 # Parameters --------------------------------------------------------------
-model_id <- "UTK4_Gender"
+model_id <- "UTK6_Gender"
 path <- "C:/Users/jy/Desktop/R_IR_7004/"
 # data_path <- file.path(path, "Data")
 data_path <- file.path(path, "FILTER_Gender_UTKFace")
@@ -22,8 +22,8 @@ model_path <- file.path(path, "Models")
 checkpoint_dir <- file.path(path, "Checkpoints")
 input_shape_len <- 128
 batch_size <- 32
-epochs <- 25
-learning_rate <- 0.0002
+epochs <- 30
+learning_rate <- 0.00002
 
 # Data Preparation --------------------------------------------------------
 image_data_generator_1 <- image_data_generator(
@@ -112,5 +112,7 @@ test_data_generator <- flow_images_from_directory(test_path,
                                                  target_size = c(input_shape_len, input_shape_len)
 )
 
+model %>% evaluate_generator(train_data_generator, steps = as.integer(train_data_generator$samples/batch_size))
+model %>% evaluate_generator(val_data_generator, steps = as.integer(val_data_generator$samples/batch_size))
 model %>% evaluate_generator(test_data_generator, steps = as.integer(test_data_generator$samples/batch_size))
 

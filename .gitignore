@@ -22,3 +22,5 @@
 Raw_Zip_Data/
 
 \.ipynb_checkpoints/
+
+*.rda

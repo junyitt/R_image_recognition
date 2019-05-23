@@ -1,0 +1,122 @@
+> model %>% evaluate_generator(test_data_generator, steps = as.integer(test_data_generator$samples/batch_size))
+$loss
+[1] 0.4148104
+
+$acc
+[1] 0.8729958
+
+> model %>% evaluate_generator(val_data_generator, steps = as.integer(val_data_generator$samples/batch_size))
+$loss
+[1] 0.4662298
+
+$acc
+[1] 0.8026717
+
+
+=================
+UTK6_Gender
+=================
+took approx 125s per epoch, approx 25 mins to reach best performance.
+> model %>% evaluate_generator(train_data_generator, steps = as.integer(train_data_generator$samples/batch_size))
+$loss
+[1] 0.2098511
+
+$acc
+[1] 0.9199812
+
+> model %>% evaluate_generator(test_data_generator, steps = as.integer(test_data_generator$samples/batch_size))
+$loss
+[1] 0.308812
+
+$acc
+[1] 0.8780591
+
+> model %>% evaluate_generator(val_data_generator, steps = as.integer(val_data_generator$samples/batch_size))
+$loss
+[1] 0.4522584
+
+$acc
+[1] 0.8036091
+
+
+=================
+UTK_Age_1
+=================
+230s per epoch, 22 best = 88 mins to reach best perf
+
+> model %>% evaluate_generator(train_data_generator, steps = as.integer(train_data_generator$samples/batch_size))
+$loss
+[1] 1.07304
+
+$acc
+[1] 0.5778285
+
+> model %>% evaluate_generator(val_data_generator, steps = as.integer(val_data_generator$samples/batch_size))
+$loss
+[1] 1.320832
+
+$acc
+[1] 0.5078546
+
+> model %>% evaluate_generator(test_data_generator, steps = as.integer(test_data_generator$samples/batch_size))
+$loss
+[1] 1.265157
+
+$acc
+[1] 0.5280946
+
+
+
+=================
+UTK_Age_2
+=================
+123s*22
+
+> model %>% evaluate_generator(train_data_generator, steps = as.integer(train_data_generator$samples/batch_size))
+$loss
+[1] 1.070722
+
+$acc
+[1] 0.5805224
+
+> model %>% evaluate_generator(val_data_generator, steps = as.integer(val_data_generator$samples/batch_size))
+$loss
+[1] 1.286072
+
+$acc
+[1] 0.5256741
+
+> model %>% evaluate_generator(test_data_generator, steps = as.integer(test_data_generator$samples/batch_size))
+$loss
+[1] 1.226542
+
+$acc
+[1] 0.5335868
+
+
+
+
+=================
+UTK_AGE_3
+================
+> model %>% evaluate_generator(train_data_generator, steps = as.integer(train_data_generator$samples/batch_size))
+$loss
+[1] 1.057571
+
+$acc
+[1] 0.5824549
+
+> model %>% evaluate_generator(val_data_generator, steps = as.integer(val_data_generator$samples/batch_size))
+$loss
+[1] 1.326882
+
+$acc
+[1] 0.5214537
+
+> model %>% evaluate_generator(test_data_generator, steps = as.integer(test_data_generator$samples/batch_size))
+$loss
+[1] 1.239455
+
+$acc
+[1] 0.5323194
+

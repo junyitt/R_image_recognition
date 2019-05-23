@@ -1,0 +1,9 @@
+UTK2_Gender
+100 epoch
+generator 20,0.2,0.2,0.15
+target_size 150,150
+
+UTK3_Gender
+32,100
+45,0.40,0.40,0.2
+256,256

@@ -10,11 +10,10 @@ get_class_weights <- function(data_generator){
         class_weights[[IX[i]]] <- VA[[i]]    
     }
     return(class_weights)
-    uy
 }
 
 # Parameters --------------------------------------------------------------
-model_id <- "LFW2"
+model_id <- "LFW3"
 path <- "C:/Users/jy/Desktop/R_IR_7004/"
 # data_path <- file.path(path, "Data")
 data_path <- file.path(path, "FILTER_Combined")
@@ -22,7 +21,7 @@ test_path <- file.path(path, "TEST_FILTER_Combined")
 model_path <- file.path(path, "Models")
 checkpoint_dir <- file.path(path, "Checkpoints")
 batch_size <- 32
-epochs <- 100
+epochs <- 50
 
 # Data Preparation --------------------------------------------------------
 image_data_generator_1 <- image_data_generator(

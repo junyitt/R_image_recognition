@@ -1,8 +1,5 @@
 source("./crop_face.R")
 
-# data_path <- "C:/Users/jy/Desktop/R_IR_7004/lfw-deepfunneled"
-# filtered_data_path <- "C:/Users/jy/Desktop/R_IR_7004/Data_lfw_filter"
-
 data_path <- "./lfw-deepfunneled"
 filtered_data_path <- "./FILTER_lfw-deepfunneled"
 dir.create(filtered_data_path, showWarnings = F)

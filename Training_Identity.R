@@ -13,7 +13,7 @@ get_class_weights <- function(data_generator){
 }
 
 # Parameters --------------------------------------------------------------
-model_id <- "LFW3"
+model_id <- "LFW4"
 path <- "C:/Users/jy/Desktop/R_IR_7004/"
 # data_path <- file.path(path, "Data")
 data_path <- file.path(path, "FILTER_Combined")

@@ -1,2 +1,22 @@
 https://github.com/opencv/opencv/blob/master/data/haarcascades/haarcascade_frontalface_default.xml
 https://github.com/opencv/opencv/blob/master/data/haarcascades/haarcascade_eye.xml
+
+FDN
+https://www.kaggle.com/gasgallo/faces-data-new
+
+LFW
+http://vis-www.cs.umass.edu/lfw/#deepfunnel-anchor
+
+LFW deep funneled images
+If you use the LFW imaged aligned by deep funneling, please cite:
+Gary B. Huang, Marwan Mattar, Honglak Lee, and Erik Learned-Miller.
+Learning to Align from Scratch.
+Advances in Neural Information Processing Systems (NIPS), 2012.
+
+@InProceedings{Huang2012a,
+  author =    {Gary B. Huang and Marwan Mattar and Honglak Lee and 
+               Erik Learned-Miller},
+  title =     {Learning to Align from Scratch},
+  booktitle = {NIPS},
+  year =      {2012}
+}

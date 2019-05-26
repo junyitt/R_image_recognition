@@ -19,7 +19,7 @@ get_label_from_generator <- function(generator){
 }
 
 # Parameters --------------------------------------------------------------
-pretrained_model_id <- "LFW2"
+pretrained_model_id <- "LFW4"
 path <- "./"
 data_path <- file.path(path, "FILTER_Combined")
 test_path <- file.path(path, "TEST_FILTER_Combined")

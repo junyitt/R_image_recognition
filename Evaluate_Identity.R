@@ -9,7 +9,7 @@ evaluate_accuracy <- function(pred, truth){
 
 
 # Parameters --------------------------------------------------------------
-model_id <- "LFW2"
+model_id <- "LFW4"
 path <- "./"
 data_path <- file.path(path, "FILTER_Combined")
 test_data_path <- file.path(path, "TEST_FILTER_Combined")

@@ -15,7 +15,7 @@ get_pred <- function(img_path, model, class_indices,  n = 5, img_size = 150){
     predicted_index <- which.max(features)
     predicted_class <- names(class_indices)[[predicted_index]]
     pred_df <- data.frame(class = names(class_indices), indices = 1:length(features), prob = features[,])
-    pdf <- pred_df %>% top_n(5,prob) %>% arrange(-prob)
+    pdf <- pred_df %>% top_n(5,prob) %>% arrange(-prob) %>% select(Class = class, Probability = prob)
     return(pdf)
 }
 
@@ -38,7 +38,7 @@ get_img_path <- function(img_name, img_path = "C:/Users/jy/Desktop/R_IR_7004/Dat
 
 
 # Parameters --------------------------------------------------------------
-model_id <- "LFW2"
+model_id <- "LFW4"
 path <- "."
 test_path <- "./DataTestTemp"
 model_path <- file.path(path, "Models")
@@ -62,19 +62,35 @@ age_model <- load_model_hdf5(file.path(model_path, paste0("model_", age_model_id
 
 shinyApp(
     ui = shinyUI(  
-        fluidRow( 
+        fluidPage( 
             h1("Select Input"),
             fileInput("myFile", "Choose an image file:", 
                       accept = c('image/png', 'image/jpeg', 'image/jpg'),
                       multiple = T
-                      ),
-            h1("Input Image"),
-            imageOutput("image2", width = "300px", height = "300px"),
-            h1("Predicted Class"),
-            tableOutput('predictTable'),
-            tableOutput('predictGenderTable'),
-            tableOutput('predictAgeTable')
-            
+            ),
+        
+            tabsetPanel(type = "tabs",
+                        tabPanel("Identity",
+                                 imageOutput("image1", width = "300px", height = "300px"),
+                                 h4("Prediction"),
+                                 tableOutput('predictTable')
+                                 ),
+                        tabPanel("Gender",
+                                 imageOutput("image2", width = "300px", height = "300px"),
+                                 p("0: Male, 1: Female"),
+                                 h4("Prediction"),
+                                 tableOutput('predictGenderTable')
+                        ),
+                        tabPanel("Age",
+                                 imageOutput("image3", width = "300px", height = "300px"),
+                                 h4("Prediction"),
+                                 tableOutput('predictAgeTable')
+                        ),
+                        tabPanel("Combined",
+                                 imageOutput("image4", width = "300px", height = "300px") 
+                                 # tableOutput('predictAgeTable')
+                        )
+            )
         )
     ),
     server = shinyServer(function(input, output,session){
@@ -95,6 +111,17 @@ shinyApp(
                 img_path
             })
             
+            output$image1 <- renderImage({
+                return(list(
+                    src = img_path,
+                    contentType = "image",
+                    width = 300,
+                    height = 300,
+                    alt = "Face"
+                ))
+                
+            }, deleteFile = FALSE)
+            
             output$image2 <- renderImage({
                 return(list(
                     src = img_path,
@@ -106,10 +133,22 @@ shinyApp(
                 
             }, deleteFile = FALSE)
             
+            output$image3 <- renderImage({
+                return(list(
+                    src = img_path,
+                    contentType = "image",
+                    width = 300,
+                    height = 300,
+                    alt = "Face"
+                ))
+            }, deleteFile = FALSE)
             
+            print("ok")
+            print(gender_class_indices)
             pred_df <- get_pred(img_path, model, face_class_indices,  n = 5)
             g_pred_df <- get_pred(img_path, gender_model, gender_class_indices,  n = 2, img_size = 128)
             a_pred_df <- get_pred(img_path, age_model, age_class_indices,  n = 2, img_size = 128)
+            print("predok")
             output$predictTable <- renderTable(pred_df)
             output$predictGenderTable <- renderTable(g_pred_df)
             output$predictAgeTable <- renderTable(a_pred_df)

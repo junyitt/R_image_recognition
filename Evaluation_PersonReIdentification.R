@@ -126,6 +126,6 @@ unseen_data_tsne_plot <- tsne_features_df %>%
     filter(Identity %in% unseen_label_sample) %>%
     ggplot(aes(x = Feature_1, y = Feature_2, col = Identity)) + 
     geom_point(shape=2) +
-    ggtitle("High-Dimensional Features Visualization using t-SNE on Unseen Test Data")
+    ggtitle("High-Dimensional Features Visualization using t-SNE on Unseen Data")
 unseen_data_tsne_plot # we can observe that some of the clusters formed can be distinguised by the target label
 

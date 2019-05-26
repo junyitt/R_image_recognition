@@ -4,7 +4,7 @@
 /Data11
 /Data_notworking
 /custom_data
-/Archive_Data
+/_Archive_Data
 /DataTest
 /Models
 /Checkpoints
@@ -19,7 +19,7 @@
 /DataTest2
 /DataTestTemp/
 
-Raw_Zip_Data/
+_Raw_Zip_Data/
 
 \.ipynb_checkpoints/
 

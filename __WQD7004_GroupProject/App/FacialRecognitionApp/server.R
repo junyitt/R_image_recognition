@@ -1,5 +1,7 @@
 library(shiny)
 library(dplyr)
+library(Rtsne)
+library(ggplot2)
 library(keras)
 
 source("../custom_functions.R")
@@ -155,8 +157,9 @@ server = shinyServer(function(input, output,session){
             labels_reid$all_train_features <- all_train_features
             labels_reid$all_train_label <- all_train_label
             labels_reid$unseen_train_label <- unseen_train_label
+            labels_reid$unseen_train_features <- unseen_train_features
             
-            train_class_df <- data.frame(table(unseen_train_features))
+            train_class_df <- data.frame(table(unseen_train_label))
             colnames(train_class_df) <- c("Identity", "NumberOfImages")
             output$train_class_table <- renderTable(train_class_df)
             output$train_loading_state <- renderText(paste0("Features extracted from ", N ," images."))
@@ -180,33 +183,33 @@ server = shinyServer(function(input, output,session){
             all_train_features <- labels_reid$all_train_features
             all_train_label <- labels_reid$all_train_label 
             unseen_train_label <- labels_reid$unseen_train_label 
+            unseen_train_features <- labels_reid$unseen_train_features 
             unseen_test_features <- get_features(img_path, img_size, intermediate_layer_model)
             ypred <- KODAMA::knn.kodama(Xtrain = all_train_features, Ytrain = as.factor(all_train_label), Xtest = unseen_test_features, k = 7)$Ypred
             y_pred <- apply(ypred, 1, getmode) # Majority vote on the label will be the final predicted label
-            
             freq <- data.frame(table(ypred))
             colnames(freq) <- c("Identity", "LikelihoodScore")
             freq[, "LikelihoodScore"] <- freq[, "LikelihoodScore"]/sum(freq[, "LikelihoodScore"])
             freq <- freq %>% arrange(-LikelihoodScore) %>% as.data.frame()
             output$predictIdentity4Table <- renderTable(freq)
             
-            
-            
             # Perform t-SNE to visualize the features extracted from the pre-trained model
             nr <- nrow(all_train_features)
-            ss <- sample(1:nr, 2000)
-            all_features <- rbind(all_train_features[ss,], unseen_test_features)
-            all_labels <- c(all_train_label[ss], unseen_test_label)
+            ss <- sample(1:nr, 1250)
+            all_features <- rbind(all_train_features[ss,], unseen_train_features, matrix(unseen_test_features,1,ncol(unseen_test_features),byrow = T))
+            all_labels <- c(all_train_label[ss], unseen_train_label, "Input")
             
             rstne_result <- Rtsne(all_features, check_duplicates = F)
             tsne_features_df <- data.frame(Feature_1 = rstne_result$Y[,1], Feature_2 = rstne_result$Y[,2], Identity = all_labels) 
             
+            input_df <- tsne_features_df[nrow(tsne_features_df),, drop=F]
             train_label_sample <- unique(unseen_train_label)
             train_data_tsne_plot <- tsne_features_df %>% 
                 filter(Identity %in% train_label_sample) %>%
                 ggplot(aes(x = Feature_1, y = Feature_2, col = Identity)) + 
                 geom_point(shape=2) +
-                ggtitle("High-Dimensional Features Visualization using t-SNE on Training Data")
+                geom_point(data = input_df, col = "blue", size = 3) +
+                ggtitle("High-Dimensional Features Visualization using t-SNE on Unseen Train Data")
             output$features_plot <- renderPlot(train_data_tsne_plot)
             
         })

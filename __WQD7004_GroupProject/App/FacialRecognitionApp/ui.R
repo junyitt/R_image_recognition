@@ -8,7 +8,7 @@ ui = shinyUI(
         h3("Upload Input"),
         fileInput("myFile", "Choose an image file:", 
                   accept = c('image/png', 'image/jpeg', 'image/jpg'),
-                  multiple = T
+                  multiple = F
         ),
     
         tabsetPanel(type = "tabs",
@@ -32,7 +32,7 @@ ui = shinyUI(
                     tabPanel("Person Re-ID",
                              hr(style = "border-color:white;"),
                              fluidRow(
-                                 column(6, 
+                                 column(4, 
                                         fileInput("TrainFile", "Upload train images (>20 images):", 
                                                   accept = c('image/png', 'image/jpeg', 'image/jpg'),
                                                   multiple = T
@@ -44,7 +44,7 @@ ui = shinyUI(
                                         actionButton("TrainButton", "Train!"),
                                         textOutput("train_loading_state")
                                  ),
-                                 column(6,
+                                 column(8,
                                         tableOutput('train_class_table')
                                  )
                              ), 
@@ -52,7 +52,7 @@ ui = shinyUI(
                              hr(),
                              
                              fluidRow(
-                                 column(6, 
+                                 column(4, 
                                         fileInput("TestFile", "Upload a test image:", 
                                                   accept = c('image/png', 'image/jpeg', 'image/jpg'),
                                                   multiple = F
@@ -60,7 +60,7 @@ ui = shinyUI(
                                         imageOutput("image4", width = "300px", height = "300px"),
                                         tableOutput('predictIdentity4Table')
                                  ),
-                                 column(6,
+                                 column(8,
                                         plotOutput('features_plot')
                                  )
                              )

@@ -31,23 +31,39 @@ ui = shinyUI(
                     ),
                     tabPanel("Person Re-ID",
                              hr(style = "border-color:white;"),
-                             fileInput("TrainFile", "Upload train images (>20 images):", 
-                                       accept = c('image/png', 'image/jpeg', 'image/jpg'),
-                                       multiple = T
-                             ),
-                             textInput("TrainClass", 
-                                       h5("Name"), 
-                                       value = ""
-                                       ), 
-                             actionButton("TrainButton", "Train!"),
-                             textOutput("train_loading_state"),
+                             fluidRow(
+                                 column(6, 
+                                        fileInput("TrainFile", "Upload train images (>20 images):", 
+                                                  accept = c('image/png', 'image/jpeg', 'image/jpg'),
+                                                  multiple = T
+                                        ),
+                                        textInput("TrainClass", 
+                                                  h5("Name"), 
+                                                  value = ""
+                                        ), 
+                                        actionButton("TrainButton", "Train!"),
+                                        textOutput("train_loading_state")
+                                 ),
+                                 column(6,
+                                        tableOutput('train_class_table')
+                                 )
+                             ), 
+                             
                              hr(),
-                             fileInput("TestFile", "Upload a test image:", 
-                                       accept = c('image/png', 'image/jpeg', 'image/jpg'),
-                                       multiple = F
-                             ),
-                             imageOutput("image4", width = "300px", height = "300px"),
-                             tableOutput('predictIdentity4Table')
+                             
+                             fluidRow(
+                                 column(6, 
+                                        fileInput("TestFile", "Upload a test image:", 
+                                                  accept = c('image/png', 'image/jpeg', 'image/jpg'),
+                                                  multiple = F
+                                        ),
+                                        imageOutput("image4", width = "300px", height = "300px"),
+                                        tableOutput('predictIdentity4Table')
+                                 ),
+                                 column(6,
+                                        plotOutput('features_plot')
+                                 )
+                             )
                     )
         )
     )

@@ -30,3 +30,5 @@ _Raw_Zip_Data/
 ~\$roupReport\.docx
 
 _GroupReport/~WRL0238\.tmp
+
+*.rdata

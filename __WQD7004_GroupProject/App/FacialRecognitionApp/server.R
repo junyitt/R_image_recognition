@@ -208,7 +208,7 @@ server = shinyServer(function(input, output,session){
                 filter(Identity %in% train_label_sample) %>%
                 ggplot(aes(x = Feature_1, y = Feature_2, col = Identity)) + 
                 geom_point(shape=2) +
-                geom_point(data = input_df, col = "blue", size = 3) +
+                geom_point(data = input_df, col = "blue", size = 5) +
                 ggtitle("High-Dimensional Features Visualization using t-SNE on Unseen Train Data")
             output$features_plot <- renderPlot(train_data_tsne_plot)
             

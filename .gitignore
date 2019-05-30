@@ -32,3 +32,5 @@ _Raw_Zip_Data/
 _GroupReport/~WRL0238\.tmp
 
 *.rdata
+
+*.hdf5

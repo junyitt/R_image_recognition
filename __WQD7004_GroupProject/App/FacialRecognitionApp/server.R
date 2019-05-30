@@ -17,6 +17,7 @@ gender_model_id <- "Gender"
 age_model_id <- "Age"
 
 unseen_train_data_path <- file.path(path, "Cache/_TRAIN_UNSEEN_LFW")
+dir.create(unseen_train_data_path, showWarnings = F)
 batch_size <- 32
 
 

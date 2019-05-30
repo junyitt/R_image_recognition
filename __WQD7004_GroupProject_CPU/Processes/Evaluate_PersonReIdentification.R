@@ -48,7 +48,8 @@ train_data_generator <- flow_images_from_directory(data_path,
 )
 
 # Get the output of the second last layer of the pretrained model ---------
-layer_index <- 157
+layer_index <- length(pretrained_model$layers)-1
+print(layer_index)
 inter_layer <- get_layer(pretrained_model, index = layer_index)
 intermediate_layer_model <- keras_model(inputs = pretrained_model$input, outputs = inter_layer$output)
 

@@ -45,8 +45,9 @@ server = shinyServer(function(input, output,session){
         # Person Re-ID intermediate layer
         pretrained_model <- model
         img_size <- pretrained_model$input_shape[[2]]
+        layers <- pretrained_model$layers
         
-        layer_index <- 157
+        layer_index <- length(layers)-1
         inter_layer <- get_layer(pretrained_model, index = layer_index)
         intermediate_layer_model <- keras_model(inputs = pretrained_model$input, outputs = inter_layer$output)
         print("Loaded Person Re-ID layer.")
@@ -196,7 +197,7 @@ server = shinyServer(function(input, output,session){
             
             # Perform t-SNE to visualize the features extracted from the pre-trained model
             nr <- nrow(all_train_features)
-            ss <- sample(1:nr, 1250)
+            ss <- sample(1:nr, 1250, replace = T)
             all_features <- rbind(all_train_features[ss,], unseen_train_features, matrix(unseen_test_features,1,ncol(unseen_test_features),byrow = T))
             all_labels <- c(all_train_label[ss], unseen_train_label, "Input")
             

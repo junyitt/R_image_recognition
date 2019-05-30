@@ -24,6 +24,9 @@ batch_size <- 32
 server = shinyServer(function(input, output,session){
     tryCatch({
     load_time <- system.time({
+        print("=====================")
+        print("Start/Refresh!")
+        print("=====================")
         # Load Identity Model
         load(file = file.path(model_path, paste0("class_indices_", identity_model_id, ".rdata")))
         face_class_indices <- class_indices
@@ -124,7 +127,7 @@ server = shinyServer(function(input, output,session){
     })
         
         labels_reid <- reactiveValues(all_train_features = list(), all_train_label = list(),
-                                      unseen_train_label = list())
+                                      unseen_train_label = list(), okay_state = 0)
         observeEvent(input$TrainButton, {
             output$train_loading_state <- renderText("Loading...")
             print("uploading files...")
@@ -164,9 +167,13 @@ server = shinyServer(function(input, output,session){
             colnames(train_class_df) <- c("Identity", "NumberOfImages")
             output$train_class_table <- renderTable(train_class_df)
             output$train_loading_state <- renderText(paste0("Features extracted from ", N ," images."))
+            labels_reid$okay_state <- 1
         })
         
         observeEvent(input$TestFile, {
+            if(labels_reid$okay_state == 0){
+                return()
+            }
             TestImage <- input$TestFile
             if (is.null(TestImage))
                 return()
